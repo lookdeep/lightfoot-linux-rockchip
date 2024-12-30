@@ -1,0 +1,24 @@
+From: Detlev Casanova <detlev.casanova@collabora.com>
+Date: Sun, 22 Jan 2023 20:28:54 -0500
+Subject: bcmdhd: Use $(srctree) in Makefile
+
+This is necessary to be able to build out of the src folder.
+
+Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+---
+ drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile b/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile
+index 2c7fd83..d8a3485 100755
+--- a/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile
++++ b/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile
+@@ -356,7 +356,7 @@ endif
+ endif
+ 
+ ARCH ?= arm64
+-BCMDHD_ROOT = $(src)
++BCMDHD_ROOT = $(srctree)/$(src)
+ #$(warning "BCMDHD_ROOT=$(BCMDHD_ROOT)")
+ EXTRA_CFLAGS = $(DHDCFLAGS)
+ EXTRA_CFLAGS += -DDHD_COMPILED=\"$(BCMDHD_ROOT)\"

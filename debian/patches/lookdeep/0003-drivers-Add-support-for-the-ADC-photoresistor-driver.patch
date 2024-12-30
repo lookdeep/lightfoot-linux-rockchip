@@ -1,0 +1,166 @@
+From: Detlev Casanova <detlev.casanova@collabora.com>
+Date: Fri, 6 Jan 2023 10:25:47 -0500
+Subject: drivers: Add support for the ADC photoresistor driver
+
+Note that the driver must be compiled as a module, not a built-in
+driver. It does not beghave properly when the needed ADC channel is not
+ready yet.
+
+Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+---
+ drivers/input/misc/Kconfig             |  11 ++++
+ drivers/input/misc/Makefile            |   1 +
+ drivers/input/misc/adc-photoresistor.c | 112 +++++++++++++++++++++++++++++++++
+ 3 files changed, 124 insertions(+)
+ create mode 100644 drivers/input/misc/adc-photoresistor.c
+
+diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
+index 362e8a0..3726bf5 100644
+--- a/drivers/input/misc/Kconfig
++++ b/drivers/input/misc/Kconfig
+@@ -869,4 +869,15 @@ config INPUT_STPMIC1_ONKEY
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called stpmic1_onkey.
+ 
++config INPUT_ADC_PHOTORESISTOR
++	tristate "KS-T1 ADC photoresistor driver"
++	depends on ARCH_ROCKCHIP
++	default m
++	help
++	  Say M to enable support for the KS-T1 ADC photoresistor.
++
++	  This driver cannot be used as a built-in driver as it does not wait
++	  for the ADC channel to be ready at boot time. The module will be
++	  called adc-photoresistor.
++
+ endif
+diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
+index a48e5f2..58ebd4e 100644
+--- a/drivers/input/misc/Makefile
++++ b/drivers/input/misc/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_INPUT_AB8500_PONKEY)	+= ab8500-ponkey.o
+ obj-$(CONFIG_INPUT_AD714X)		+= ad714x.o
+ obj-$(CONFIG_INPUT_AD714X_I2C)		+= ad714x-i2c.o
+ obj-$(CONFIG_INPUT_AD714X_SPI)		+= ad714x-spi.o
++obj-$(CONFIG_INPUT_ADC_PHOTORESISTOR)	+= adc-photoresistor.o
+ obj-$(CONFIG_INPUT_ADXL34X)		+= adxl34x.o
+ obj-$(CONFIG_INPUT_ADXL34X_I2C)		+= adxl34x-i2c.o
+ obj-$(CONFIG_INPUT_ADXL34X_SPI)		+= adxl34x-spi.o
+diff --git a/drivers/input/misc/adc-photoresistor.c b/drivers/input/misc/adc-photoresistor.c
+new file mode 100644
+index 0000000..115add4
+--- /dev/null
++++ b/drivers/input/misc/adc-photoresistor.c
+@@ -0,0 +1,112 @@
++#include <linux/err.h>
++#include <linux/iio/consumer.h>
++#include <linux/iio/types.h>
++#include <linux/input.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
++#include <linux/slab.h>
++#include <linux/miscdevice.h>
++
++#define CCI0_M_RD            1
++
++static struct iio_channel *channel;
++
++static long photoresistor_misc_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
++{
++	int rc;
++	int value;
++
++	switch(cmd) {
++	case CCI0_M_RD:
++		rc = iio_read_channel_raw(channel, &value);
++		if (rc < 0) {
++			pr_err("%s: read iio raw failed\n", __func__);
++			return -EFAULT;
++		}
++		rc = copy_to_user((int *)arg, &value, sizeof(int));
++		if (rc) {
++			pr_err("%s: copy_to_user failed\n", __func__);
++			return -EFAULT;
++		}
++		break;
++	default:
++		return -EINVAL; 
++	}
++
++	return rc;
++}
++
++static int photoresistor_misc_open(struct inode* node, struct file* file)
++{
++	return 0;
++}
++
++static int photoresistor_misc_release(struct inode* node, struct file* file)
++{
++	return 0;
++}
++
++static const struct file_operations photoresistor_misc_fops =
++{
++	.owner = THIS_MODULE,
++	.unlocked_ioctl = photoresistor_misc_ioctl,
++	.open           = photoresistor_misc_open,
++	.release        = photoresistor_misc_release,
++};
++
++static struct miscdevice photoresistor_misc_device =
++{
++	.minor = MISC_DYNAMIC_MINOR,
++	.name = "photoresistor",
++	.fops = &photoresistor_misc_fops,
++};
++
++static int adc_photoresistor_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++
++	dev_info(dev, "Entry %s\n", __func__);
++	channel = iio_channel_get(dev, NULL);
++	if (IS_ERR(channel)) {
++		channel = NULL;
++		dev_err( dev, "%s() have not set adc chan\n", __func__);
++		return -1;
++	}
++	
++	misc_register(&photoresistor_misc_device);
++	dev_info(dev, "Exit %s\n", __func__);
++	return 0;
++}
++
++static int adc_photoresistor_remove(struct platform_device *pdev)
++{
++	misc_deregister(&photoresistor_misc_device);
++	iio_channel_release(channel);
++	return 0;
++}
++
++
++#ifdef CONFIG_OF
++static const struct of_device_id adc_photoresistor_of_match[] = {
++	{ .compatible = "adc-photoresistor", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, adc_photoresistor_of_match);
++#endif
++
++static struct platform_driver __refdata adc_photoresistor_driver = {
++	.driver = {
++		.name    = "adc_photoresistor",
++		.owner  = THIS_MODULE,
++		.of_match_table = of_match_ptr(adc_photoresistor_of_match),
++	},
++	.probe  = adc_photoresistor_probe,
++	.remove = adc_photoresistor_remove,
++};
++module_platform_driver(adc_photoresistor_driver);
++MODULE_AUTHOR("Minrray <yangfuqi@minrrayav.com>");
++MODULE_DESCRIPTION("Input driver for resistor ladder connected on ADC");
++MODULE_LICENSE("GPL v2");

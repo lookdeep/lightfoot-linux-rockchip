@@ -1,0 +1,20 @@
+From: Detlev Casanova <detlev.casanova@collabora.com>
+Date: Mon, 23 Jan 2023 17:48:54 -0500
+Subject: arm64: rockchip: Do not force the root= value in the dts
+
+Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+---
+ arch/arm64/boot/dts/rockchip/rk3588-linux.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/arch/arm64/boot/dts/rockchip/rk3588-linux.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-linux.dtsi
+@@ -12,7 +12,7 @@
+ 	};
+ 
+ 	chosen: chosen {
+-		bootargs = "earlycon=uart8250,mmio32,0xfeb50000 console=ttyFIQ0 irqchip.gicv3_pseudo_nmi=0 root=PARTUUID=614e0000-0000 rw rootwait rcupdate.rcu_expedited=1 rcu_nocbs=all";
++		bootargs = "earlycon=uart8250,mmio32,0xfeb50000 console=ttyFIQ0 irqchip.gicv3_pseudo_nmi=0 rcupdate.rcu_expedited=1 rcu_nocbs=all";
+ 	};
+ 
+ 	cspmu: cspmu@fd10c000 {
