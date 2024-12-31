@@ -8,3 +8,4 @@ lookdeep/0005-Add-vendor-specific-changes.patch
 lookdeep/0006-bcmdhd-use-srctree-in-Makefile.patch
 lookdeep/0007-arm64-rockchip-Do-not-force-the-root-value-in-the-dt.patch
 lookdeep/0008-upcm-Build-it-as-a-module.patch
+lookdeep/0009-dtb-install-path.patch

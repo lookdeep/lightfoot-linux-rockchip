@@ -1,0 +1,29 @@
+# LookDeep Linux Rockchip
+
+Forked from Armbian linux-rockchip repo.
+
+## Modifications
+
+- ~~Copied `debian` folder from debian linux repo for 6.1 kernel (https://salsa.debian.org/kernel-team/linux/-/tree/debian/6.1/bookworm/debian?ref_type=heads)~~
+- ~~Modified debian/patches/series to comment out several patches that don't apply to our hardware~~
+- Copied in LVU specific debian patches (`debian/patches/lookdeep`) from lightfoot 5.x repo
+- Applied patches using quilt and fixed references
+- ~~Copied `drivers/switch` from lightfoot 5.x repo~~
+- Copied `debian/config/arm64/config` from lightfoot 5.x repo to `.config`. Ran `ARCH=arm64 make olddefconfig`
+- Removed imx415 source code patch
+
+## Building
+
+- Apply patches with `QUILT_PATCHES=debian/patches quilt push -a`
+- For patch conflicts execute `quilt push -f`, make edits to file, then execute `quilt refresh`
+- `dpkg --add-architecture arm64`
+- `export PATH="/usr/lib/ccache:$PATH"`
+- `ccache -s`
+- `./scripts/config -e WLAN -e WLAN_VENDOR_BROADCOM -m BRCMUTIL -m BRCMFMAC \
+                       -e BRCMFMAC_PROTO_BCDC -e BRCMFMAC_PROTO_MSGBUF \
+                       -e BRCMFMAC_USB \
+                       -e WLAN_VENDOR_REALTEK -m RTW89 -m RTW89_CORE \
+                       -m RTW89_PCI -m RTW89_8825B -m RTW89_8852BE \
+                       -m BINFMT_MISC`
+- `ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make -j$(nproc) bindeb-pkg`
+- wireless questions - accept defaults

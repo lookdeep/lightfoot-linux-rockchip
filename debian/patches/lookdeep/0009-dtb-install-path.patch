@@ -1,0 +1,83 @@
+Index: lightfoot-linux-rockchip/scripts/package/builddeb
+===================================================================
+--- lightfoot-linux-rockchip.orig/scripts/package/builddeb
++++ lightfoot-linux-rockchip/scripts/package/builddeb
+@@ -152,7 +152,7 @@ cp "$($MAKE -s -f $srctree/Makefile imag
+ if is_enabled CONFIG_OF_EARLY_FLATTREE; then
+ 	# Only some architectures with OF support have this target
+ 	if [ -d "${srctree}/arch/$SRCARCH/boot/dts" ]; then
+-		$MAKE -f $srctree/Makefile INSTALL_DTBS_PATH="$tmpdir/usr/lib/$packagename" dtbs_install
++		$MAKE -f $srctree/Makefile INSTALL_DTBS_PATH="$tmpdir/boot/dtbs/$packagename" dtbs_install
+ 	fi
+ fi
+ 
+Index: lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/Makefile
+===================================================================
+--- lightfoot-linux-rockchip.orig/arch/arm64/boot/dts/rockchip/Makefile
++++ lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/Makefile
+@@ -201,7 +201,6 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-ev
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb6-ddr3-v10-linux.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb6-ddr3-v10-rk630-bt656-to-cvbs.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb7-ddr4-v10.dtb
+-dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-ks-t1.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb8-lp4-v10.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb8-lp4-v10-linux.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-hinlink-h66k.dtb
+Index: lightfoot-linux-rockchip/include/linux/switch.h
+===================================================================
+--- /dev/null
++++ lightfoot-linux-rockchip/include/linux/switch.h
+@@ -0,0 +1,53 @@
++/*
++ *  Switch class driver
++ *
++ * Copyright (C) 2008 Google, Inc.
++ * Author: Mike Lockwood <lockwood@android.com>
++ *
++ * This software is licensed under the terms of the GNU General Public
++ * License version 2, as published by the Free Software Foundation, and
++ * may be copied, distributed, and modified under those terms.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++*/
++
++#ifndef __LINUX_SWITCH_H__
++#define __LINUX_SWITCH_H__
++
++struct switch_dev {
++	const char	*name;
++	struct device	*dev;
++	int		index;
++	int		state;
++
++	ssize_t	(*print_name)(struct switch_dev *sdev, char *buf);
++	ssize_t	(*print_state)(struct switch_dev *sdev, char *buf);
++};
++
++struct gpio_switch_platform_data {
++	const char *name;
++	unsigned 	gpio;
++
++	/* if NULL, switch_dev.name will be printed */
++	const char *name_on;
++	const char *name_off;
++	/* if NULL, "0" or "1" will be printed */
++	const char *state_on;
++	const char *state_off;
++};
++
++extern int switch_dev_register(struct switch_dev *sdev);
++extern void switch_dev_unregister(struct switch_dev *sdev);
++
++static inline int switch_get_state(struct switch_dev *sdev)
++{
++	return sdev->state;
++}
++
++extern void switch_set_state(struct switch_dev *sdev, int state);
++
++#endif /* __LINUX_SWITCH_H__ */
