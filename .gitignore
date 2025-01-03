@@ -80,7 +80,8 @@ modules.order
 #
 # Debian directory (make deb-pkg)
 #
-/debian/
+/debian/changelog
+/debian/rules
 
 #
 # Snap directory (make snap-pkg)
