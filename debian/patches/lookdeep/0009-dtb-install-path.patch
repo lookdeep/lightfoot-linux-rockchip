@@ -2,12 +2,13 @@ Index: lightfoot-linux-rockchip/scripts/package/builddeb
 ===================================================================
 --- lightfoot-linux-rockchip.orig/scripts/package/builddeb
 +++ lightfoot-linux-rockchip/scripts/package/builddeb
-@@ -152,7 +152,7 @@ cp "$($MAKE -s -f $srctree/Makefile imag
+@@ -152,7 +152,8 @@ cp "$($MAKE -s -f $srctree/Makefile imag
  if is_enabled CONFIG_OF_EARLY_FLATTREE; then
  	# Only some architectures with OF support have this target
  	if [ -d "${srctree}/arch/$SRCARCH/boot/dts" ]; then
 -		$MAKE -f $srctree/Makefile INSTALL_DTBS_PATH="$tmpdir/usr/lib/$packagename" dtbs_install
-+		$MAKE -f $srctree/Makefile INSTALL_DTBS_PATH="$tmpdir/boot/dtbs/$packagename" dtbs_install
++		# $MAKE -f $srctree/Makefile INSTALL_DTBS_PATH="$tmpdir/boot/dtbs/$packagename" dtbs_install
++		$MAKE -f $srctree/Makefile INSTALL_DTBS_PATH="$tmpdir/boot/dtbs/$version" dtbs_install
  	fi
  fi
  
