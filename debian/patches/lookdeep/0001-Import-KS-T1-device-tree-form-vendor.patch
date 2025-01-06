@@ -19,8 +19,10 @@ Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
  create mode 100755 arch/arm64/boot/dts/rockchip/rk3588-ks-t1.dts
  create mode 100755 arch/arm64/boot/dts/rockchip/rk3588-ks-t1.dtsi
 
+Index: lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-audio.dtsi
+===================================================================
 --- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-audio.dtsi
++++ lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-audio.dtsi
 @@ -0,0 +1,145 @@
 +/ {
 +    micarray_codec:micarray-codec {
@@ -167,8 +169,10 @@ Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 +	pinctrl-0 = <&i2c8m3_xfer>;
 +	status = "okay";
 +};
+Index: lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-imx415-s.dtsi
+===================================================================
 --- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-imx415-s.dtsi
++++ lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-imx415-s.dtsi
 @@ -0,0 +1,285 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
@@ -455,8 +459,10 @@ Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 +	};
 +};
 +
+Index: lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-imx415.dtsi
+===================================================================
 --- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-imx415.dtsi
++++ lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-imx415.dtsi
 @@ -0,0 +1,285 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
@@ -743,8 +749,10 @@ Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 +	};
 +};
 +
+Index: lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-net.dtsi
+===================================================================
 --- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-net.dtsi
++++ lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1-net.dtsi
 @@ -0,0 +1,60 @@
 +
 +/ {
@@ -807,8 +815,10 @@ Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 +	};
 +};
 \ No newline at end of file
+Index: lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1.dts
+===================================================================
 --- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-ks-t1.dts
++++ lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1.dts
 @@ -0,0 +1,12 @@
 +/dts-v1/;
 +
@@ -823,8 +833,10 @@ Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 +	compatible = "rockchip,rk3588-evb7-lp4-v10", "rockchip,rk3588";
 +};
 \ No newline at end of file
+Index: lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1.dtsi
+===================================================================
 --- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-ks-t1.dtsi
++++ lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1.dtsi
 @@ -0,0 +1,699 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
@@ -1525,3 +1537,15 @@ Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 +	pinctrl-names = "active";
 +	pinctrl-0 = <&pwm15m2_pins>;
 +};
+Index: lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/Makefile
+===================================================================
+--- lightfoot-linux-rockchip.orig/arch/arm64/boot/dts/rockchip/Makefile
++++ lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/Makefile
+@@ -345,6 +345,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-ev
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb7-v11.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb7-v11-linux.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb7-v11-rk628-hdmi2csi.dtb
++dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-ks-t1.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-armsom-aim7-io.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-armsom-sige7.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-armsom-w3.dtb

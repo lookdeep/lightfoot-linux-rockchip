@@ -1,5 +1,5 @@
-linux-upstream (6.1.75-9) unstable; urgency=low
+linux-upstream (6.1.75-23) unstable; urgency=low
 
   * Custom built Linux kernel.
 
- -- root <root@717d1c2b9979>  Mon, 30 Dec 2024 18:13:40 +0000
+ -- root <root@442cada4f012>  Fri, 03 Jan 2025 21:26:51 +0000
