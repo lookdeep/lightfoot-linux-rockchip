@@ -9,7 +9,7 @@ Forked from Armbian linux-rockchip repo.
 - Copied in LVU specific debian patches (`debian/patches/lookdeep`) from lightfoot 5.x repo
 - Applied patches using quilt and fixed references
 - ~~Copied `drivers/switch` from lightfoot 5.x repo~~
-- Copied `debian/config/arm64/config` from lightfoot 5.x repo to `.config`. Ran `ARCH=arm64 make olddefconfig`
+- Copied `debian/config/arm64/config` from lightfoot 5.x repo to `.config`. Ran `ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make olddefconfig`
 - Removed imx415 source code patch
 
 ## Building
@@ -25,5 +25,5 @@ Forked from Armbian linux-rockchip repo.
                        -e WLAN_VENDOR_REALTEK -m RTW89 -m RTW89_CORE \
                        -m RTW89_PCI -m RTW89_8825B -m RTW89_8852BE \
                        -m BINFMT_MISC`
-- `ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make -j$(nproc) bindeb-pkg`
+- `ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make -j$(nproc) KBUILD_IMAGE=arch/arm64/boot/Image bindeb-pkg`
 - wireless questions - accept defaults
