@@ -837,7 +837,7 @@ Index: lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1.dtsi
 ===================================================================
 --- /dev/null
 +++ lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1.dtsi
-@@ -0,0 +1,699 @@
+@@ -0,0 +1,703 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
@@ -1536,6 +1536,10 @@ Index: lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/rk3588-ks-t1.dtsi
 +	status = "okay";
 +	pinctrl-names = "active";
 +	pinctrl-0 = <&pwm15m2_pins>;
++};
++
++&leds {
++	status = "disabled";
 +};
 Index: lightfoot-linux-rockchip/arch/arm64/boot/dts/rockchip/Makefile
 ===================================================================

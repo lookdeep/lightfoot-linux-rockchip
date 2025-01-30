@@ -19,11 +19,12 @@ Forked from Armbian linux-rockchip repo.
 - `dpkg --add-architecture arm64`
 - `export PATH="/usr/lib/ccache:$PATH"`
 - `ccache -s`
-- `./scripts/config -e WLAN -e WLAN_VENDOR_BROADCOM -m BRCMUTIL -m BRCMFMAC \
+- ~~./scripts/config -e WLAN -e WLAN_VENDOR_BROADCOM -m BRCMUTIL -m BRCMFMAC \
                        -e BRCMFMAC_PROTO_BCDC -e BRCMFMAC_PROTO_MSGBUF \
                        -e BRCMFMAC_USB \
                        -e WLAN_VENDOR_REALTEK -m RTW89 -m RTW89_CORE \
                        -m RTW89_PCI -m RTW89_8825B -m RTW89_8852BE \
-                       -m BINFMT_MISC`
+                       -m BINFMT_MISC~~
+- `git config --global --add safe.directory /linux`
 - `ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make -j$(nproc) KBUILD_IMAGE=arch/arm64/boot/Image bindeb-pkg`
 - wireless questions - accept defaults
