@@ -14,9 +14,11 @@ Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
  drivers/regulator/core.c                           | 14 ++--
  3 files changed, 39 insertions(+), 59 deletions(-)
 
---- a/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile
-+++ b/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile
-@@ -31,7 +31,7 @@
+Index: lightfoot-linux-rockchip/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile
+===================================================================
+--- lightfoot-linux-rockchip.orig/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile
++++ lightfoot-linux-rockchip/drivers/net/wireless/rockchip_wlan/rkwifi/bcmdhd/Makefile
+@@ -31,7 +31,7 @@ CONFIG_BCMDHD_OOB := y
  #CONFIG_BCMDHD_CUSB := y
  #CONFIG_BCMDHD_NO_POWER_OFF := y
  CONFIG_BCMDHD_PROPTXSTATUS := y
@@ -25,9 +27,11 @@ Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
  CONFIG_BCMDHD_STATIC_BUF_IN_DHD := y
  #CONFIG_BCMDHD_ANDROID_VERSION := 14
  CONFIG_BCMDHD_AUTO_SELECT := y
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -1913,12 +1913,14 @@
+Index: lightfoot-linux-rockchip/drivers/regulator/core.c
+===================================================================
+--- lightfoot-linux-rockchip.orig/drivers/regulator/core.c
++++ lightfoot-linux-rockchip/drivers/regulator/core.c
+@@ -1913,12 +1913,14 @@ static struct regulator *create_regulato
  		regulator->dev = dev;
  
  		/* Add a link to the device sysfs entry */
@@ -48,3 +52,262 @@ Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
  		}
  	}
  
+Index: lightfoot-linux-rockchip/drivers/media/i2c/imx415.c
+===================================================================
+--- lightfoot-linux-rockchip.orig/drivers/media/i2c/imx415.c
++++ lightfoot-linux-rockchip/drivers/media/i2c/imx415.c
+@@ -56,7 +56,7 @@
+ #include "cam-tb-setup.h"
+ #include "cam-sleep-wakeup.h"
+ 
+-#define DRIVER_VERSION			KERNEL_VERSION(0, 0x01, 0x08)
++#define DRIVER_VERSION			KERNEL_VERSION(0, 0x01, 0x09)
+ 
+ #ifndef V4L2_CID_DIGITAL_GAIN
+ #define V4L2_CID_DIGITAL_GAIN		V4L2_CID_GAIN
+@@ -247,17 +247,6 @@ struct imx415 {
+ 	struct cam_sw_info *cam_sw_inf;
+ };
+ 
+-static struct rkmodule_csi_dphy_param dcphy_param = {
+-	.vendor = PHY_VENDOR_SAMSUNG,
+-	.lp_vol_ref = 6,
+-	.lp_hys_sw = {3, 0, 0, 0},
+-	.lp_escclk_pol_sel = {1, 1, 1, 1},
+-	.skew_data_cal_clk = {0, 3, 3, 3},
+-	.clk_hs_term_sel = 2,
+-	.data_hs_term_sel = {2, 2, 2, 2},
+-	.reserved = {0},
+-};
+-
+ #define to_imx415(sd) container_of(sd, struct imx415, subdev)
+ 
+ /*
+@@ -268,6 +257,7 @@ static __maybe_unused const struct regva
+ 	{0x3008, 0x7F},
+ 	{0x300A, 0x5B},
+ 	{0x30C1, 0x00},
++        {0x3030, 0x03},
+ 	{0x3031, 0x01},
+ 	{0x3032, 0x01},
+ 	{0x30D9, 0x06},
+@@ -361,6 +351,7 @@ static __maybe_unused const struct regva
+ 	{0x3029, 0x04},
+ 	{0x302C, 0x00},
+ 	{0x302D, 0x00},
++        {0x3030, 0x03},
+ 	{0x3033, 0x05},
+ 	{0x3050, 0x08},
+ 	{0x3051, 0x00},
+@@ -395,6 +386,7 @@ static __maybe_unused const struct regva
+ 	{0x3029, 0x02},
+ 	{0x302C, 0x01},
+ 	{0x302D, 0x01},
++        {0x3030, 0x03},
+ 	{0x3033, 0x04},
+ 	{0x3050, 0x90},
+ 	{0x3051, 0x0D},
+@@ -429,6 +421,7 @@ static __maybe_unused const struct regva
+ 	{0x3029, 0x02},
+ 	{0x302C, 0x01},
+ 	{0x302D, 0x02},
++        {0x3030, 0x03},
+ 	{0x3033, 0x04},
+ 	{0x3050, 0x14},
+ 	{0x3051, 0x01},
+@@ -465,6 +458,7 @@ static __maybe_unused const struct regva
+ 	{0x311E, 0x24},
+ 	{0x32D4, 0x21},
+ 	{0x32EC, 0xA1},
++        {0x3030, 0x03},
+ 	{0x3452, 0x7F},
+ 	{0x3453, 0x03},
+ 	{0x358A, 0x04},
+@@ -550,6 +544,7 @@ static __maybe_unused const struct regva
+ 	{0x3029, 0x02},
+ 	{0x302C, 0x01},
+ 	{0x302D, 0x02},
++        {0x3030, 0x03},
+ 	{0x3033, 0x08},
+ 	{0x3050, 0x90},
+ 	{0x3051, 0x15},
+@@ -585,6 +580,7 @@ static __maybe_unused const struct regva
+ 	{0x3029, 0x01},
+ 	{0x302C, 0x01},
+ 	{0x302D, 0x02},
++        {0x3030, 0x03},
+ 	{0x3033, 0x04},
+ 	{0x3050, 0x3E},
+ 	{0x3051, 0x01},
+@@ -620,6 +616,7 @@ static __maybe_unused const struct regva
+ 	{0x3029, 0x02},
+ 	{0x302C, 0x01},
+ 	{0x302D, 0x01},
++        {0x3030, 0x03},
+ 	{0x3033, 0x08},
+ 	{0x3050, 0xA8},
+ 	{0x3051, 0x0D},
+@@ -655,6 +652,7 @@ static __maybe_unused const struct regva
+ 	{0x3029, 0x04},
+ 	{0x302C, 0x00},
+ 	{0x302D, 0x00},
++        {0x3030, 0x03},
+ 	{0x3033, 0x05},
+ 	{0x3050, 0x08},
+ 	{0x3051, 0x00},
+@@ -690,6 +688,7 @@ static __maybe_unused const struct regva
+ 	{0x3029, 0x03},
+ 	{0x302C, 0x00},
+ 	{0x302D, 0x00},
++        {0x3030, 0x03},
+ 	{0x3031, 0x00},
+ 	{0x3033, 0x07},
+ 	{0x3050, 0x08},
+@@ -729,6 +728,7 @@ static __maybe_unused const struct regva
+ 	{0x3029, 0x02},
+ 	{0x302C, 0x01},
+ 	{0x302D, 0x01},
++        {0x3030, 0x03},
+ 	{0x3031, 0x00},
+ 	{0x3033, 0x05},
+ 	{0x3050, 0xB8},
+@@ -2059,7 +2059,6 @@ static long imx415_ioctl(struct v4l2_sub
+ 	long ret = 0;
+ 	const struct imx415_mode *mode;
+ 	u64 pixel_rate = 0;
+-	struct rkmodule_csi_dphy_param *dphy_param;
+ 	u8 lanes = imx415->bus_cfg.bus.mipi_csi2.num_data_lanes;
+ 
+ 	switch (cmd) {
+@@ -2144,15 +2143,6 @@ static long imx415_ioctl(struct v4l2_sub
+ 		ch_info = (struct rkmodule_channel_info *)arg;
+ 		ret = imx415_get_channel_info(imx415, ch_info);
+ 		break;
+-	case RKMODULE_GET_CSI_DPHY_PARAM:
+-		if (imx415->cur_mode->hdr_mode == HDR_X2) {
+-			dphy_param = (struct rkmodule_csi_dphy_param *)arg;
+-			*dphy_param = dcphy_param;
+-			dev_info(&imx415->client->dev,
+-				 "get sensor dphy param\n");
+-		} else
+-			ret = -EINVAL;
+-		break;
+ 	default:
+ 		ret = -ENOIOCTLCMD;
+ 		break;
+@@ -2174,7 +2164,6 @@ static long imx415_compat_ioctl32(struct
+ 	long ret;
+ 	u32  stream;
+ 	u32 brl = 0;
+-	struct rkmodule_csi_dphy_param *dphy_param;
+ 
+ 	switch (cmd) {
+ 	case RKMODULE_GET_MODULE_INFO:
+@@ -2278,22 +2267,6 @@ static long imx415_compat_ioctl32(struct
+ 		}
+ 		kfree(ch_info);
+ 		break;
+-	case RKMODULE_GET_CSI_DPHY_PARAM:
+-		dphy_param = kzalloc(sizeof(*dphy_param), GFP_KERNEL);
+-		if (!dphy_param) {
+-			ret = -ENOMEM;
+-			return ret;
+-		}
+-
+-		ret = imx415_ioctl(sd, cmd, dphy_param);
+-		if (!ret) {
+-			ret = copy_to_user(up, dphy_param, sizeof(*dphy_param));
+-			if (ret)
+-				ret = -EFAULT;
+-		}
+-		kfree(dphy_param);
+-		break;
+-
+ 	default:
+ 		ret = -ENOIOCTLCMD;
+ 		break;
+@@ -2419,6 +2392,7 @@ unlock_and_return:
+ 
+ int __imx415_power_on(struct imx415 *imx415)
+ {
++
+ 	int ret;
+ 	struct device *dev = &imx415->client->dev;
+ 	if (!IS_ERR_OR_NULL(imx415->pins_default)) {
+@@ -2437,6 +2411,10 @@ int __imx415_power_on(struct imx415 *imx
+ 		if (!IS_ERR(imx415->reset_gpio))
+ 			gpiod_direction_output(imx415->reset_gpio, 0);
+ 
++		usleep_range(10 * 1000, 20 * 1000);
++		if (!IS_ERR(imx415->reset_gpio))
++			gpiod_direction_output(imx415->reset_gpio, 1);
++
+ 		/* At least 1us between XCLR and clk */
+ 		/* fix power on timing if insmod this ko */
+ 		usleep_range(10 * 1000, 20 * 1000);
+@@ -2482,6 +2460,8 @@ err_clk:
+ 
+ static void __imx415_power_off(struct imx415 *imx415)
+ {
++
++#if 1
+ 	int ret;
+ 	struct device *dev = &imx415->client->dev;
+ 
+@@ -2496,7 +2476,7 @@ static void __imx415_power_off(struct im
+ 
+ 	if (!IS_ERR(imx415->reset_gpio))
+ 		gpiod_direction_output(imx415->reset_gpio, 1);
+-	clk_disable_unprepare(imx415->xvclk);
++	//clk_disable_unprepare(imx415->xvclk);
+ 	if (!IS_ERR_OR_NULL(imx415->pins_sleep)) {
+ 		ret = pinctrl_select_state(imx415->pinctrl,
+ 					   imx415->pins_sleep);
+@@ -2506,6 +2486,7 @@ static void __imx415_power_off(struct im
+ 	if (!IS_ERR(imx415->power_gpio))
+ 		gpiod_direction_output(imx415->power_gpio, 0);
+ 	regulator_bulk_disable(IMX415_NUM_SUPPLIES, imx415->supplies);
++        #endif
+ }
+ 
+ #if IS_REACHABLE(CONFIG_VIDEO_CAM_SLEEP_WAKEUP)
+@@ -2564,11 +2545,11 @@ static int __maybe_unused imx415_runtime
+ 
+ static int __maybe_unused imx415_runtime_suspend(struct device *dev)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
+-	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+-	struct imx415 *imx415 = to_imx415(sd);
++	// struct i2c_client *client = to_i2c_client(dev);
++	// struct v4l2_subdev *sd = i2c_get_clientdata(client);
++	// struct imx415 *imx415 = to_imx415(sd);
+ 
+-	__imx415_power_off(imx415);
++	// __imx415_power_off(imx415);
+ 
+ 	return 0;
+ }
+@@ -2787,9 +2768,9 @@ static int imx415_set_ctrl(struct v4l2_c
+ 		if (ret)
+ 			break;
+ 		if (ctrl->val)
+-			val |= IMX415_MIRROR_BIT_MASK;
+-		else
+ 			val &= ~IMX415_MIRROR_BIT_MASK;
++		else
++			val |= IMX415_MIRROR_BIT_MASK;
+ 		ret = imx415_write_reg(imx415->client, IMX415_FLIP_REG,
+ 				       IMX415_REG_VALUE_08BIT, val);
+ 		break;
+@@ -2799,9 +2780,9 @@ static int imx415_set_ctrl(struct v4l2_c
+ 		if (ret)
+ 			break;
+ 		if (ctrl->val)
+-			val |= IMX415_FLIP_BIT_MASK;
++			val &= ~IMX415_FLIP_BIT_MASK;   // 解决双目医疗项目sensor翻转问题
+ 		else
+-			val &= ~IMX415_FLIP_BIT_MASK;
++			val |= IMX415_FLIP_BIT_MASK;
+ 		ret = imx415_write_reg(imx415->client, IMX415_FLIP_REG,
+ 				       IMX415_REG_VALUE_08BIT, val);
+ 		break;
